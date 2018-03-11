@@ -1,0 +1,6 @@
+[submodule "zlib"]
+	path = zlib
+	url = https://github.com/madler/zlib
+[submodule "enet"]
+	path = enet
+	url = https://github.com/rna88/enet
