@@ -1,5 +1,5 @@
 CXX = g++
-Target := Example1
+Target := 01.Tutorial
 TargetPath := ../bin/
 Sources := main.cpp
 

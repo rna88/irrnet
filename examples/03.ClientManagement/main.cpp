@@ -1,8 +1,8 @@
 /*
-Example 2: Client management.
+Example 3: Client management.
 
 In this example I will demonstrate client management.
-For a more basic introduction please refer to Tutorial.cpp first.
+For a more basic introduction please refer to the Tutorial first.
 (Recommended)
 */
 
