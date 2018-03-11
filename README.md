@@ -1,6 +1,6 @@
 ## Irrnet
 
-An updated version of the (irrNetLite)[http://irrlicht.sourceforge.net/forum/viewtopic.php?f=6&t=22658] networking library compiled against recent versions of (enet)[https://github.com/lsalzman/enet] and (zlib)[https://github.com/madler/zlib].
+An updated version of the [irrNetLite](http://irrlicht.sourceforge.net/forum/viewtopic.php?f=6&t=22658) networking library compiled against recent versions of [enet](https://github.com/lsalzman/enet) and [zlib](https://github.com/madler/zlib).
 
 ## Compiling for Linux
 
