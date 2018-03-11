@@ -1,8 +1,8 @@
 /*
-Example 1: Packet Identification.
+Example 2: Packet Identification.
 
 In this example I will expain the basics of packet identification.
-For a more basic introduction please refer to Tutorial.cpp first.
+For a more basic introduction please refer to the tutorial first.
 (Recommended)
 */
 

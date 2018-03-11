@@ -1,11 +1,10 @@
 /*
+Example 1: Tutorial.
+
 Welcome to the simple, introductory tutorial for irrNetLite. This will show you the
 very basics of setting up a client and server, and sending and receiving packets.
 Because irrNetLite is so easy to use, I think you will not find many actual lines of
 code in this example, rather most of it is documentation.
-
-For much more sophisticated use of irrNetLite, I recommend taking a look in the 
-examples subdirectory.
 */
 
 // Include the main irrNet.h header for irrNetLite.

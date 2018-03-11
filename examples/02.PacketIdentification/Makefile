@@ -1,5 +1,5 @@
 CXX = g++
-Target := Tutorial
+Target := 02.PacketIdentification
 TargetPath := ../bin/
 Sources := main.cpp
 

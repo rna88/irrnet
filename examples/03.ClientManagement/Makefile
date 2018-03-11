@@ -1,5 +1,5 @@
 CXX = g++
-Target := Example2
+Target := 03.ClientManagement
 TargetPath := ../bin/
 Sources := main.cpp
 
