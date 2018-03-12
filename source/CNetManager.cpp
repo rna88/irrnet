@@ -29,6 +29,14 @@ namespace irr
 
 		CNetManager::~CNetManager(void)
 		{
+
+			if(mode == ENM_CLIENT)
+			{
+				ENetEvent event;
+				enet_peer_disconnect(peer, 0);
+				enet_host_service(host, &event, 0);
+			}
+
 			if(host)
 				enet_host_destroy(host);
 

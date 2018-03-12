@@ -9,7 +9,7 @@ When cloning use the `--recurse-submodules` flag to retrieve the enet and zlib l
 
 `git clone --recurse-submodules https://github.com/rna88/irrnet.git`
 
-Then run `make` in the `source/` directory to build the library. 
+Then run `make` in the `source/` directory to build the library, which will be placed in `lib/`.
 
 
 ## Building examples
@@ -22,9 +22,9 @@ or to build them with optimizations:
 
 `./linux_buildAllExamples.sh release` 
 
-The compiled binaries will be found in `examples/bin/`
+The compiled binaries will be found in `examples/bin/`.
 
 
 ## License
 
-Refer to `source/ReadMe.txt`
+Refer to `source/ReadMe.txt`.
