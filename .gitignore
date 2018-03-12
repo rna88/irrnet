@@ -1,1 +1,5 @@
 *.o
+*.a
+examples/bin/*
+!examples/bin/.gitkeep
+!lib/.gitkeep

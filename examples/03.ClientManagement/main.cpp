@@ -103,6 +103,7 @@ public:
 		message += " has just left the building.";
 		packet << message;
 		netManager->sendOutPacket(packet);
+		std::cout << "Client number " << playerId << " disconnected" << std::endl;
 	}
 	
 	// Handle the packets, as usual.
@@ -213,11 +214,14 @@ int main()
 			netManager->sendOutPacket(packet);
 		}
 	
-		// Here is the update loop, we will exit if there is a connection problem.
-		while(netManager->getConnectionStatus() != net::EICS_FAILED)
+		// Here is the update loop, we will exit if there is a connection problem
+		// or after running for 10 seconds.
+		int i = 0;
+		while(netManager->getConnectionStatus() != net::EICS_FAILED && i < 10)
 		{
 			// Here we update.
 			netManager->update(1000);
+			++i;
 		}
 		
 		// Clean up.
