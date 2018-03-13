@@ -85,9 +85,15 @@ public:
 			core::stringc message;
 			message = "Client number ";
 			message += playerId;
-			message += " has just connected.";
+			message += " has just connected. ";
+			message += netManager->getPeerCount();
+			message += " peer(s) total.";
 			packet << message;
 			netManager->sendOutPacket(packet);
+
+			std::cout << "Client number " << playerId << " connected. " 
+			<< netManager->getPeerCount() << " peer(s) total." << std::endl;
+
 		}			
 	}
 	
@@ -100,10 +106,15 @@ public:
 		core::stringc message;
 		message = "Client number ";
 		message += playerId;
-		message += " has just left the building.";
+		message += " has just left the building. ";
+		message += netManager->getPeerCount();
+		message += " peer(s) left.";
 		packet << message;
 		netManager->sendOutPacket(packet);
-		std::cout << "Client number " << playerId << " disconnected" << std::endl;
+
+		std::cout << "Client number " << playerId << " disconnected. " 
+			<< netManager->getPeerCount() << " peer(s) left." << std::endl;
+
 	}
 	
 	// Handle the packets, as usual.
