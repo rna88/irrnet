@@ -316,16 +316,18 @@ namespace irr
 
 							if(pData)
 							{
+								u16 disconnectingPID = pData->playerID;
+
 								if(verbose)
 									std::cout	<< "irrNetLite: Player number "
-												<< pData->playerID
+												<< disconnectingPID 
 												<< " disconnected.\n";
 
-								if(pHandler) pHandler->onDisconnect(pData->playerID);
-
-								players[pData->playerID] = 0;
+								players[disconnectingPID] = 0;
 								delete pData;
 								event.peer->data = 0;
+
+								if(pHandler) pHandler->onDisconnect(disconnectingPID);
 							}
 						}
 					default:
@@ -366,7 +368,17 @@ namespace irr
 
 		const u32 CNetManager::getPeerCount()
 		{
-			return (u32)host->peerCount;
+			u32 count = 0;
+			
+		  for (u32 i = 1; i < netParams.maxClients; ++i)
+		  {
+		    if (players[i])
+		    {
+		      ++count;
+		    }
+		  }
+		
+		  return count;
 		}
 
 		const u16 CNetManager::getPlayerNumber()
