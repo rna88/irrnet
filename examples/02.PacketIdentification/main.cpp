@@ -156,7 +156,8 @@ int main()
 	// If they typed 's' they are the server else they are the client.
 	if(i == 's')
 	{
-		// Create an irrNetLite server.
+		// Create an irrNetLite server. We won't specifiy a listen port, 
+		// so the default port of 45000 will be used.
 		net::INetManager* netManager = net::createIrrNetServer(0);
 		
 		// Pass in a server specific net callback.
@@ -172,14 +173,18 @@ int main()
 	}
 	else
 	{
-		// Create a client and pass in the client callback.
+		// Create a client and pass in the client callback. Since the server is
+		// using the default listen port of 45000, we don't need to pass it in.
 		// You may want to change the ip address to a remote one and experiment
 		// with connecting to a remote host.
 		ClientNetCallback* clientCallback = new ClientNetCallback();
 		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1");
+
+		if (netManager->getConnectionStatus() == net::EICS_FAILED)
+			return 0;
 		
 		// Print a simple menu.
-		std::cout 	<< "Example 1. What would you like to do?" << std::endl
+		std::cout 	<< "You are connected! What would you like to do?" << std::endl
 				<< "1. Change the cannon rotation." << std::endl
 				<< "2. Change the cannon power." << std::endl
 				<< "3. Send a message." << std::endl;
