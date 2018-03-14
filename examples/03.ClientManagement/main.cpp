@@ -181,8 +181,9 @@ int main()
 	// If they typed 's' they are the server else they are the client.
 	if(i == 's')
 	{
-		// Create an irrNetLite server.
-		net::INetManager* netManager = net::createIrrNetServer(0);
+		// Create an irrNetLite server. In this example we decide to listen on 
+		// port 65535, the highest port allowed.
+		net::INetManager* netManager = net::createIrrNetServer(0,65535);
 		
 		// Pass in a server specific net callback.
 		ServerNetCallback* serverCallback = new ServerNetCallback(netManager);
@@ -204,7 +205,7 @@ int main()
 		// if you run all the clients from the same pc and ban one, you
 		// won't be able to create anymore clients unless you restart the server.
 		ClientNetCallback* clientCallback = new ClientNetCallback();
-		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1");
+		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
 		
 		// The clients in this example will simply send a custom greeting message
 		// when they connect and then wait and poll for events.
@@ -213,7 +214,7 @@ int main()
 		if(netManager->getConnectionStatus() != net::EICS_FAILED)
 		{
 			// Print a simple menu.
-			std::cout << "Example 2. Please enter a greeting message:" << std::endl;
+			std::cout << "You are connected! Please enter a greeting message:" << std::endl;
 					
 			// Take the input.
 			std::string message;

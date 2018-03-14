@@ -93,9 +93,10 @@ int main()
 	if(i == 's')
 	{
 		// Create a server and pass in a new instance of our callback class. The default
-		// port that clients can connect to is set to 45000.
+		// port that clients can connect to is set to 45000, we'll set it to 60000.
+		// Recall that the valid port range is 1-65535.
 		MyNetCallback* netCallback = new MyNetCallback();
-		net::INetManager* netManager = net::createIrrNetServer(netCallback);
+		net::INetManager* netManager = net::createIrrNetServer(netCallback, 60000);
 
 		// Setting verbose to true makes irrNetLite spit out debug information to the console.
 		netManager->setVerbose(true);
@@ -118,27 +119,24 @@ int main()
 		// address ("127.0.0.1"), which basically means we are connecting to the same
 		// computer the client is on. Note that we just pass a value of 0 as our
 		// INetCallback, because the client in this example does no need to handle any
-		// packets. You can safely pass a value of 0 if this is the case.
-		net::INetManager* netManager = net::createIrrNetClient(0, "127.0.0.1");
+		// packets. You can safely pass a value of 0 if this is the case. 
+		net::INetManager* netManager = net::createIrrNetClient(0, "127.0.0.1", 60000);
 		
 		// Enable debug messages.
 		netManager->setVerbose(true);
 
+		
 		// Here comes the fun part, while the client is connected we update the netManager
 		// and ask it to wait 1 second (1000 milliseconds) for new packets to arrive before
 		// returning. Since the client in this example doesn't actually receive any packets,
 		// the only purpose of the update call is to leave a 1 second interval between each
-		// packet we send.
-
+		// packet we send. To prevent an infinite loop of messages we will quit after 10 messages.
 		int i = 0;
-		// To send a packet, first you create an SOutPacket object.
-		net::SOutPacket packet;
-
 		while(netManager->getConnectionStatus() != net::EICS_FAILED && i < 10 )
 		{
 
 			// To send a packet, first you create an SOutPacket object.
-			//net::SOutPacket packet;
+			net::SOutPacket packet;
 			
 			// Then you can use the streaming operator << to add new data to it.
 			packet << "Help I am stuck on a mountain!";
@@ -161,7 +159,6 @@ int main()
 			netManager->sendOutPacket(packet);
 
 			netManager->update(1000);
-			packet.clearData();
 			i++;
 		}
 		
