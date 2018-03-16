@@ -154,10 +154,14 @@ class SInPacket
 		/// Returns the size in bytes of the packet.
 		u32 getSize(); 
 
+		/// Returns true if the packet decompresses/decrypts successfully.
+		bool isValid();
+
 	private:
 		u32 pos;
 		core::array<c8> buff;
 		u16 playerid;
+		bool valid;
 };
 
 } // Close Net Namespace
