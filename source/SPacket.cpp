@@ -225,7 +225,7 @@ void SOutPacket::decryptPacket(const c8 key[16])
 	buff = tmpbuff;
 }
 
-SInPacket::SInPacket(const c8* buff, const u32 size) : pos(0), playerid(0)
+SInPacket::SInPacket(const c8* buff, const u32 size) : pos(0), playerid(0), valid(true)
 {
 	SInPacket::buff.set_used(size);
 	memcpy(SInPacket::buff.pointer(), buff, size);
@@ -435,10 +435,19 @@ void SInPacket::deCompressPacket()
 	newBuff.set_used(newSize);
 
 	uLongf destLen = newSize;
-	uncompress((Bytef*)newBuff.pointer(), &destLen, (Bytef*)buff.pointer() + 4, buff.size() - 4);
-	newBuff.set_used(destLen);
-
-	buff = newBuff;
+	int ret = uncompress((Bytef*)newBuff.pointer(), &destLen, (Bytef*)buff.pointer() + 4, buff.size() - 4);
+	
+	if (ret != Z_OK)
+	{
+		valid = false;
+		newBuff.set_used(0);
+		newBuff.clear();
+	}
+	else
+	{
+		newBuff.set_used(destLen);
+		buff = newBuff;
+	}
 }
 
 void SInPacket::encryptPacket(const c8 key[16])
@@ -457,6 +466,12 @@ void SInPacket::encryptPacket(const c8 key[16])
 
 void SInPacket::decryptPacket(const c8 key[16])
 {
+	if (buff.size() % 16 != 0)
+	{
+		valid = false;
+		return;
+	}
+
 	CEncryption::SetEncryptionKey((u8*)&key[0]);
 	const u32 newSize = buff.size();
 	core::array<c8> tmpbuff;
@@ -471,6 +486,11 @@ void SInPacket::decryptPacket(const c8 key[16])
 u32 SInPacket::getSize()
 {
 	return buff.size();
+}
+
+bool SInPacket::isValid()
+{
+	return valid;
 }
 
 } // Close Net Namespace
