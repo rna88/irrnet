@@ -72,6 +72,10 @@ public:
 
 		if(message.size() > 20)
 		{
+		    net::SOutPacket packet;
+			packet << 	"Message too long, " \
+				 	"so I kicked and banned them.";
+			netManager->sendOutPacket(packet);
 			netManager->kickClient(playerId);
 			u32 address = netManager->getClientAddress(playerId);
 			banList.push_back(address);
