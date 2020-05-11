@@ -3,3 +3,7 @@
 examples/bin/*
 !examples/bin/.gitkeep
 !lib/.gitkeep
+source/IrrNetLiteTest.depend
+source/IrrNetLiteTest.layout
+source/IrrNetLiteTestLib.layout
+*.exe

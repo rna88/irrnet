@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1589232554 source:e:\github\harchirrnetlite\source\main_test.cpp
+1589233531 source:e:\github\harchirrnetlite\source\main_test.cpp
 	<irrNet.h>
+	<iostream>
 
 1589231453 e:\github\harchirrnetlite\include\\irrnet.h
 	"SPacket.h"
@@ -392,4 +393,57 @@
 	<io.h>
 	<windows.h>
 	<errno.h>
+
+1484461780 source:e:\github\harchirrnetlite\source\zlib\gzlib.c
+	"gzguts.h"
+
+1483216630 source:e:\github\harchirrnetlite\source\zlib\gzread.c
+	"gzguts.h"
+
+1484461780 source:e:\github\harchirrnetlite\source\zlib\gzwrite.c
+	"gzguts.h"
+	<stdarg.h>
+
+1483216630 source:e:\github\harchirrnetlite\source\zlib\infback.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+	"inffixed.h"
+
+1317828752 e:\github\harchirrnetlite\source\zlib\inffixed.h
+
+1484461780 source:e:\github\harchirrnetlite\source\zlib\inffast.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+
+1483216630 source:e:\github\harchirrnetlite\source\zlib\inflate.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+	"inffixed.h"
+	<stdio.h>
+
+1484461780 source:e:\github\harchirrnetlite\source\zlib\inftrees.c
+	"zutil.h"
+	"inftrees.h"
+
+1484460434 source:e:\github\harchirrnetlite\source\zlib\trees.c
+	"deflate.h"
+	<ctype.h>
+	"trees.h"
+	<stdio.h>
+
+1271568758 e:\github\harchirrnetlite\source\zlib\trees.h
+
+1483163356 source:e:\github\harchirrnetlite\source\zlib\uncompr.c
+	"zlib.h"
+
+1484461780 source:e:\github\harchirrnetlite\source\zlib\zutil.c
+	"zutil.h"
+	"gzguts.h"
+	<stdlib.h>
 

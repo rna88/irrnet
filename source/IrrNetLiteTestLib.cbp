@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="IrrNetLiteTest" />
+		<Option title="IrrNetLiteLib" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<MakeCommands>
@@ -95,7 +95,6 @@
 		<Unit filename="enet/win32.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="main_test.cpp" />
 		<Unit filename="zlib/adler32.c">
 			<Option compilerVar="CC" />
 		</Unit>
