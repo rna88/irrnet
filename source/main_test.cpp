@@ -132,8 +132,7 @@ int main()
 	else
 	{
 		ClientNetCallback* clientCallback = new ClientNetCallback();
-		//net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
-		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "crossalt.ru", 65535);
+		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
 		clientCallback->incc = netManager;
 
 		if(netManager->getConnectionStatus() != net::EICS_FAILED)
