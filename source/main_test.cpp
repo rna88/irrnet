@@ -1,5 +1,6 @@
 #include <irrNet.h>
 #include <iostream>
+#include <conio.h>
 
 using namespace irr;
 
@@ -83,7 +84,8 @@ public:
 		}
 		else
 		{
-			std::cout << "Client " << playerId << " said " << message.c_str() << std::endl;
+		    u32 pingclient = netManager->getPing(packet.getPlayerId());
+			std::cout << "Client " << playerId << " said " << message.c_str() << ", ping: " << pingclient << std::endl;
 		}
 	}
 
@@ -95,6 +97,8 @@ private:
 class ClientNetCallback : public net::INetCallback
 {
 public:
+    ClientNetCallback(): incc(0){}
+    net::INetManager* incc;
 	virtual void handlePacket(net::SInPacket& packet)
 	{
 		core::stringc message;
@@ -117,7 +121,10 @@ int main()
 		netManager->setNetCallback(serverCallback);
 
 		while(netManager->getConnectionStatus() != net::EICS_FAILED)
-			netManager->update(1000);
+        {
+            netManager->update(1000);
+            std::cout << "Ping: " << netManager->getPing(1) << std::endl;
+        }
 
 		delete netManager;
 		delete serverCallback;
@@ -125,7 +132,9 @@ int main()
 	else
 	{
 		ClientNetCallback* clientCallback = new ClientNetCallback();
-		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
+		//net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
+		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "crossalt.ru", 65535);
+		clientCallback->incc = netManager;
 
 		if(netManager->getConnectionStatus() != net::EICS_FAILED)
 		{
@@ -140,10 +149,16 @@ int main()
 		}
 
 		int i = 0;
-		while(netManager->getConnectionStatus() != net::EICS_FAILED && i < 10)
+		while(netManager->getConnectionStatus() != net::EICS_FAILED /*&& i < 10*/)
 		{
+		    if(kbhit())
+            {
+                int q;
+                std::cin >> q;
+            }
 			netManager->update(1000);
 			++i;
+			std::cout << "ping: " << netManager->getPing() << std::endl;
 		}
 
 		delete netManager;

@@ -43,12 +43,12 @@ Optional settings for the creation of the INetManager.
 
 downBandwidth
 -------------
-The down (incoming) bandwidth of the current internet connection. You may set this value for 
+The down (incoming) bandwidth of the current internet connection. You may set this value for
 more accurate packet throttling. In kbps.
 
 upBandwidth
 -----------
-The up (outgoing) bandwidth of the current internet connection. You may set this value for 
+The up (outgoing) bandwidth of the current internet connection. You may set this value for
 more accurate packet throttling. In kbps.
 
 maxClients
@@ -77,13 +77,13 @@ your own packet handling functions. Everytime a packet is recieved over the netw
 is passed to this method. When initialising a INetManager, a pointer to an instance of the
 derived class must be passed. Please see SInPacket regarding information on handling InPackets.
 */
-class INetCallback 
+class INetCallback
 {
 public:
 	virtual void handlePacket(SInPacket& packet) = 0;
 	virtual void onConnect(const u16 playerId) {};
 	virtual void onDisconnect(const u16 playerId) {};
-	
+
 	virtual ~INetCallback() {};
 };
 
@@ -93,7 +93,7 @@ INetManager class.
 class INetManager
 {
 public:
-	/**	
+	/**
 	This function updates the state of the NetManager and handles the sending/receiving of packets.
 	Make sure to stick this in your run loop, or at the very least update it very often. If this
 	function is not updated pending packets will not be sent and received packets will not be handled.
@@ -117,11 +117,11 @@ public:
 	It may be useful for debugging purposes.
 	*/
 	virtual void setVerbose(bool isverbose) = 0;
-	
+
 	/// Sets a new INetCallback as the net callback.
 	virtual void setNetCallback(INetCallback* netCallback) = 0;
 
-	/**	
+	/**
 	This function sends an SOutPacket. Out packets provide an easy interface for sending data across a network.
 	Conversions etc are all taken care of by irrNet. All you have to do is create some kind of variable then add it,
 	then read the data from the SInPacket on the recieving end. Here is an example of adding data to an SOutPacket:
@@ -160,9 +160,9 @@ public:
 	virtual void sendOutPacketUnreliable(SOutPacket& outpacket) = 0;
 
 	/**
-	This sends an SOutPacket unreliably to a specific player denoted by the player number. 
+	This sends an SOutPacket unreliably to a specific player denoted by the player number.
 	Players are numbered automatically as they connect to the server. IMPORTANT: This feature
-	is only valid if you are the server. This is because clients can only send packets to the server, 
+	is only valid if you are the server. This is because clients can only send packets to the server,
 	making this function unusable. This is not recommended for critical information.
 	Please refer to sendOutPacket(const SOutPacket& outpacket) for more info.
 	*/
@@ -184,16 +184,15 @@ public:
 	virtual void kickClient(const u16 playerId, bool hardKick = false) = 0;
 
 	/**
-	This returns a value of type E_IRRNET_CONNECTION_STATUS. This can either be EICS_PENDING, which indicates the 
+	This returns a value of type E_IRRNET_CONNECTION_STATUS. This can either be EICS_PENDING, which indicates the
 	connection is still in process, EICS_ESTABLISHED, which indicates the connection has been successfully established,
 	or EICS_FAILED, which indicates the connection was not successful or has since disconnected. This is generally only
 	useful for clients, but the information is provided for servers incase there is a fault with the server setup.
 	*/
 	virtual E_IRRNET_CONNECTION_STATUS getConnectionStatus() = 0;
-			
-	/// This returns the ping. Useful for clients as it returns the ping to the server. For servers it returns
-	/// the ping to the first connected player.
-	virtual const u32 getPing() = 0;
+
+	/// This returns the ping of player with id pID (for server). For clients as it always returns the ping to the server.
+	virtual const u32 getPing(u32 pID = 0) = 0;
 
 	/// Sets the number of packet processing iterations per update. You may want to increase this number if
 	/// you are not updating frequently enough for all the packets to get processed. (Default: 10000)
@@ -221,7 +220,7 @@ INetManager* createIrrNetServer(INetCallback* callback, const u32 port = 45000, 
 
 // Copyright(C) Ahmed Hilali 2008
 
-/* 
+/*
 	License:
 		This software is provided 'as-is', without any express or implied
 		warranty.  In no event will the authors be held liable for any damages

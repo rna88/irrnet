@@ -41,6 +41,13 @@ namespace irr
 				enet_host_destroy(host);
 
 			enet_deinitialize();
+
+			u32 pID = 0;
+			while(pID < netParams.maxClients)
+            {
+                if(players[pID] != 0) delete players[pID];
+                pID++;
+            }
 		}
 
 		bool CNetManager::setUpClient(const c8* addressc, const u32 port)
@@ -320,7 +327,7 @@ namespace irr
 
 								if(verbose)
 									std::cout	<< "irrNetLite: Player number "
-												<< disconnectingPID 
+												<< disconnectingPID
 												<< " disconnected.\n";
 
 								players[disconnectingPID] = 0;
@@ -350,18 +357,21 @@ namespace irr
 			return 0;
 		}
 
-		ENetPeer* CNetManager::getPeer()
+		ENetPeer* CNetManager::getPeer(u32 pID)
 		{
 			if(connectionStatus == EICS_ESTABLISHED)
-				return &host->peers[0];
+            {
+				if(mode == ENM_CLIENT) return &host->peers[0];
+				else if(players[pID]) return players[pID]->enetPeer;
+            }
 			else
 				return 0;
 		}
 
-		const u32 CNetManager::getPing()
+		const u32 CNetManager::getPing(u32 pID)
 		{
-			if(getPeer())
-				return getPeer()->roundTripTime;
+			if(getPeer(pID))
+				return getPeer(pID)->roundTripTime;
 			else
 				return 0;
 		}
@@ -369,7 +379,7 @@ namespace irr
 		const u32 CNetManager::getPeerCount()
 		{
 			u32 count = 0;
-			
+
 		  for (u32 i = 1; i < netParams.maxClients; ++i)
 		  {
 		    if (players[i])
@@ -377,7 +387,7 @@ namespace irr
 		      ++count;
 		    }
 		  }
-		
+
 		  return count;
 		}
 

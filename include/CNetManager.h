@@ -17,7 +17,7 @@ namespace irr
 {
 	namespace net
 	{
-			
+
 		class CNetManager : public INetManager
 		{
 		public:
@@ -41,9 +41,9 @@ namespace irr
 			virtual void sendOutPacketUnreliable(SOutPacket& outpacket);
 			virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const u16 playerId);
 			virtual void kickClient(const u16 playerId, bool hardKick);
-		
+
 			virtual const u32 getPeerCount();
-			virtual const u32 getPing();
+			virtual const u32 getPing(u32 pID = 0);
 			virtual const u32 getClientAddress(const u16 playerId);
 
 			virtual const u16 getPlayerNumber();
@@ -72,23 +72,23 @@ namespace irr
 			ENetAddress address;
 
 			u16 playerID;
-			
+
 			INetCallback* pHandler;
 			u32 netIterations;
 			SNetParams netParams;
-			
+
 			std::vector<SPeerData*> players;
 			bool verbose;
 			bool globPacketRelay;
 
 			E_IRRNET_CONNECTION_STATUS connectionStatus;
 			E_NET_MODE mode;
-	
+
 			bool setUpClient(const c8* addressc, u32 port);
 			bool setUpServer(u32 port);
 
 			ENetPeer* getPlayerById(u16 id);
-			ENetPeer* getPeer();
+			ENetPeer* getPeer(u32 pID);
 			ENetHost* getHost();
 		};
 
