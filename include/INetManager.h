@@ -60,27 +60,38 @@ connectionTimeout
 -----------------
 The maximum connection timeout allowed when connecting to a server. In milliseconds. (For
 clients only.)
+
+numberChannels
+-----------------
+The number of ENet channels for connection.
+Attention: channelID with number 1 used for service information. If it value is 1, we have
+only one channel with ID 0. If channelID == 2, we have two channels: first with channelID == 0
+and second with channelID == 2 (not 1). If numberChannels == 3, we have three channels with
+IDs 0, 2 and 3. Channel with number 1 is service channel! Maybe in next versions I change service
+channel from 1 to 0, but not now.
 */
 struct SNetParams
 {
-	SNetParams() : downBandwidth(128000), upBandwidth(56000), maxClients(100), connectionTimeout(5000) {};
+	SNetParams() : downBandwidth(128000), upBandwidth(56000), maxClients(100), connectionTimeout(5000), numberChannels(1) {};
 
 	u32 downBandwidth;
 	u32 upBandwidth;
 	u32 maxClients;
 	u32 connectionTimeout;
+	u32 numberChannels;
 };
 
 /**
 You must create a derived class of INetCallback and override the "handlePacket" method to perform
 your own packet handling functions. Everytime a packet is recieved over the network, an SInPacket
-is passed to this method. When initialising a INetManager, a pointer to an instance of the
+is passed to this method with channelID (it is ENet channel ID). When initialising a INetManager, a pointer to an instance of the
 derived class must be passed. Please see SInPacket regarding information on handling InPackets.
+SInPacket with channelID == 1 not passed to handlePacket, it is service channel for IrrNetLite.
 */
 class INetCallback
 {
 public:
-	virtual void handlePacket(SInPacket& packet) = 0;
+	virtual void handlePacket(SInPacket& packet, u32 channelID) = 0;
 	virtual void onConnect(const u16 playerId) {};
 	virtual void onDisconnect(const u16 playerId) {};
 
@@ -170,6 +181,9 @@ public:
 
 	/// This gets the number of players connected. This is only valid for servers.
 	virtual const u32 getPeerCount() = 0;
+
+	/// This gets the number of ENet channels.
+	virtual const u32 getChannelsCount() = 0;
 
 	/// This returns the playerID for this machine. Only valid for Clients.
 	virtual const u16 getPlayerNumber() = 0;

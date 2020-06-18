@@ -57,7 +57,8 @@ namespace irr
 			if(verbose)
 				std::cout << "irrNetLite: Creating client!" << std::endl;
 
-			host = enet_host_create(NULL, 1,2, netParams.downBandwidth / 8, netParams.upBandwidth / 8);
+			//host = enet_host_create(NULL, 1, 2, netParams.downBandwidth / 8, netParams.upBandwidth / 8);
+			host = enet_host_create(NULL, 1, netParams.numberChannels + 1, netParams.downBandwidth / 8, netParams.upBandwidth / 8);
 
 			ENetEvent event;
 
@@ -69,7 +70,8 @@ namespace irr
 							<< addressc	<< ":" << port << std::endl;
 
 			// Sets up two channels.
-			peer = enet_host_connect(host, &address, 2, 0);
+			//peer = enet_host_connect(host, &address, 2, 0);
+			peer = enet_host_connect(host, &address, netParams.numberChannels + 1, 0);
 
 			if(peer == NULL)
 			{
@@ -133,7 +135,8 @@ namespace irr
 			if(verbose)
 				std::cout << "irrNetLite: Creating server!\n";
 
-			host = enet_host_create(&address, netParams.maxClients,2, 0,0);
+			//host = enet_host_create(&address, netParams.maxClients, 2, 0,0);
+			host = enet_host_create(&address, netParams.maxClients, netParams.numberChannels + 1, 0, 0);
 
 			if(host == NULL)
 			{
@@ -195,7 +198,7 @@ namespace irr
 								SInPacket inpacket((c8*)buff, (u32)event.packet->dataLength);
 
 								if(pHandler)
-									pHandler->handlePacket(inpacket);
+									pHandler->handlePacket(inpacket, event.channelID);
 							}
 
 							buff = 0;
@@ -299,7 +302,7 @@ namespace irr
 													<< " was received.\n";
 
 									if(pHandler)
-										pHandler->handlePacket(inPacket);
+										pHandler->handlePacket(inPacket, event.channelID);
 
 									if(globPacketRelay)
 									{
@@ -389,6 +392,11 @@ namespace irr
 		  }
 
 		  return count;
+		}
+
+		const u32 CNetManager::getChannelsCount()
+		{
+            return netParams.numberChannels;
 		}
 
 		const u16 CNetManager::getPlayerNumber()

@@ -7,7 +7,7 @@ using namespace irr;
 class ServerNetCallback : public net::INetCallback
 {
 public:
-	ServerNetCallback(net::INetManager* netManagerIn) : netManager(netManagerIn) {}
+	ServerNetCallback(net::INetManager* netManagerIn) : netManager(netManagerIn), numbrem(0) {}
 
 	virtual void onConnect(const u16 playerId)
 	{
@@ -63,15 +63,15 @@ public:
 
 	}
 
-	virtual void handlePacket(net::SInPacket& packet)
+	virtual void handlePacket(net::SInPacket& packet, u32 channelID)
 	{
-		core::stringc message;
+		int message;
 		packet >> message;
 
 		u16 playerId = packet.getPlayerId();
 
 
-		if(message.size() > 20)
+		/*if(message.size() > 20)
 		{
 		    net::SOutPacket packet;
 			packet << 	"Message too long, " \
@@ -82,16 +82,22 @@ public:
 			banList.push_back(address);
 			std::cout << "Player from " << address << " banned." << std::endl;
 		}
-		else
+		else*/
 		{
 		    u32 pingclient = netManager->getPing(packet.getPlayerId());
-			std::cout << "Client " << playerId << " said " << message.c_str() << ", ping: " << pingclient << std::endl;
+			std::cout << "Client " << playerId << " said " << message << ", ping: " << pingclient << ", channelID: " << channelID << std::endl;
+			if(numbrem + 1 != message)
+            {
+                std::cout << "ERROR! LOST " << numbrem + 1 << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+            }
+			numbrem = message;
 		}
 	}
 
 private:
 	core::array<u32> banList;
 	net::INetManager* netManager;
+	int numbrem;
 };
 
 class ClientNetCallback : public net::INetCallback
@@ -99,11 +105,11 @@ class ClientNetCallback : public net::INetCallback
 public:
     ClientNetCallback(): incc(0){}
     net::INetManager* incc;
-	virtual void handlePacket(net::SInPacket& packet)
+	virtual void handlePacket(net::SInPacket& packet, u32 channelID)
 	{
 		core::stringc message;
 		packet >> message;
-		std::cout << "Server says: " << message.c_str() << std::endl;
+		std::cout << "Server says: " << message.c_str() << "Channel ID: " << channelID << std::endl;
 	}
 };
 
@@ -123,7 +129,7 @@ int main()
 		while(netManager->getConnectionStatus() != net::EICS_FAILED)
         {
             netManager->update(1000);
-            std::cout << "Ping: " << netManager->getPing(1) << std::endl;
+            //std::cout << "Ping: " << netManager->getPing(1) << std::endl;
         }
 
 		delete netManager;
@@ -132,14 +138,14 @@ int main()
 	else
 	{
 		ClientNetCallback* clientCallback = new ClientNetCallback();
-		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "127.0.0.1", 65535);
+		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "crossalt.ru", 65535);
 		clientCallback->incc = netManager;
 
 		if(netManager->getConnectionStatus() != net::EICS_FAILED)
 		{
 			std::cout << "You are connected! Please enter a greeting message:" << std::endl;
 
-			std::string message;
+			int message;
 			std::cin >> message;
 
 			net::SOutPacket packet;
@@ -155,9 +161,12 @@ int main()
                 int q;
                 std::cin >> q;
             }
-			netManager->update(1000);
+			netManager->update(10);
+			net::SOutPacket packet;
+			packet << i;
+			netManager->sendOutPacket(packet);
 			++i;
-			std::cout << "ping: " << netManager->getPing() << std::endl;
+			//std::cout << "ping: " << netManager->getPing() << std::endl;
 		}
 
 		delete netManager;

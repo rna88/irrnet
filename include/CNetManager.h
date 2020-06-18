@@ -43,6 +43,7 @@ namespace irr
 			virtual void kickClient(const u16 playerId, bool hardKick);
 
 			virtual const u32 getPeerCount();
+			virtual const u32 getChannelsCount();
 			virtual const u32 getPing(u32 pID = 0);
 			virtual const u32 getClientAddress(const u16 playerId);
 
