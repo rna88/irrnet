@@ -175,9 +175,10 @@ public:
 	Players are numbered automatically as they connect to the server. IMPORTANT: This feature
 	is only valid if you are the server. This is because clients can only send packets to the server,
 	making this function unusable. This is not recommended for critical information.
+	If isUnsequenced == 0, this packet will not be sequenced with other packets.
 	Please refer to sendOutPacket(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0) for more info.
 	*/
-	virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0) = 0;
+	virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0, bool isUnsequenced = false) = 0;
 
 	/// This gets the number of players connected. This is only valid for servers.
 	virtual const u32 getPeerCount() = 0;

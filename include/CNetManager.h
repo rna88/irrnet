@@ -37,7 +37,7 @@ namespace irr
 			virtual void setNetCallback(INetCallback* netCallback) {pHandler = netCallback;}
 			virtual void setGlobalPacketRelay(bool relay);
             virtual void sendOutPacket(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0);
-			virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0);
+			virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0, bool isUnsequenced = false);
 			virtual void kickClient(const u16 playerId, bool hardKick = false);
 
 			virtual const u32 getPeerCount();

@@ -451,12 +451,14 @@ namespace irr
             }
 		}
 
-		void CNetManager::sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId, const u32 channelID)
+		void CNetManager::sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId, const u32 channelID, bool isUnsequenced)
 		{
 		    if(channelID == 1 || channelID > netParams.numberChannels)
                 if(verbose) std::cout << "Error sending packet: channelID is incorrect!" << std::endl;
 
-			ENetPacket* packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(), 0);
+			ENetPacket* packet = 0;
+			if(isUnsequenced) packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(), ENET_PACKET_FLAG_UNSEQUENCED);
+			else packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(), 0);
 			if(playerId < 0) enet_host_broadcast(host, channelID, packet);
             else
             {

@@ -89,6 +89,11 @@ public:
 			if(numbrem + 1 != message)
             {
                 std::cout << "ERROR! LOST " << numbrem + 1 << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+                if(message < numbrem)
+                {
+                    std::cout << "SEQUENCED!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
+                    netManager->kickClient(playerId);
+                }
             }
 			numbrem = message;
 		}
@@ -171,7 +176,7 @@ int main()
 			netManager->update(10);
 			net::SOutPacket packet;
 			packet << i;
-			netManager->sendOutPacketUnreliable(packet, -1, 2);
+			netManager->sendOutPacketUnreliable(packet, -1, 2, true);
 			++i;
 			//std::cout << "ping: " << netManager->getPing() << std::endl;
 		}
