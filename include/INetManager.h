@@ -149,35 +149,35 @@ public:
 	NetManager->sendOutPacket(MyOutPacket);
 	\endcode
 
-	This sends the packet to all connected clients if you are the server, or directly to the server if you
-	are a client. To send to a specific client use "sendOutPacket(SOutPacket& outpacket, const u16 playerId)".
+	This function send packet to ENet channel with channelID (default 0).
+
+	If playerId < 0 (default == -1) this sends the packet to all connected clients if you are the server, or directly to the server if you
+	are a client. To send to a specific client set playerId to ID of player.
 	Please refer to SOutPacket for more information on what types of variables an SOutPacket can handle
 	automatically.
-	*/
-	virtual void sendOutPacket(SOutPacket& outpacket) = 0;
 
-	/**
-	This sends an SOutPacket to a specific player denoted by the player number. Players are numbered
+	If playerId >= 0, this sends an SOutPacket to a specific player denoted by the player ID (number). Players are numbered
 	automatically as they connect to the server. IMPORTANT: This feature is only valid if you are the server.
 	This is because clients can only send packets to the server, making this function unusable.
-	Please refer to sendOutPacket(const SOutPacket& outpacket) for more info.
+	Please read above for more info.
+
+	Example sending from client to channel 2:
+
+	NetManager->sendOutPacket(MyOutPacket, -1, 2);
+
 	*/
-	virtual void sendOutPacket(SOutPacket& outpacket, const u16 playerId) = 0;
+	virtual void sendOutPacket(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0) = 0;
 
 	/**
-	This sends the SOutPacket specified unreliably. This is not recommended for critical information.
-	Please refer to sendOutPacket(const SOutPacket& outpacket) for more info.
-	*/
-	virtual void sendOutPacketUnreliable(SOutPacket& outpacket) = 0;
+	If playerId < 0 (default == -1) this sends the SOutPacket specified unreliably. This is not recommended for critical information.
 
-	/**
-	This sends an SOutPacket unreliably to a specific player denoted by the player number.
+	If playerId >= 0 this sends an SOutPacket unreliably to a specific player denoted by the player ID (number).
 	Players are numbered automatically as they connect to the server. IMPORTANT: This feature
 	is only valid if you are the server. This is because clients can only send packets to the server,
 	making this function unusable. This is not recommended for critical information.
-	Please refer to sendOutPacket(const SOutPacket& outpacket) for more info.
+	Please refer to sendOutPacket(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0) for more info.
 	*/
-	virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const u16 playerId) = 0;
+	virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0) = 0;
 
 	/// This gets the number of players connected. This is only valid for servers.
 	virtual const u32 getPeerCount() = 0;

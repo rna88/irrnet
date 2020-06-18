@@ -119,9 +119,14 @@ int main()
 	char i;
 	std::cin >> i;
 
+	irr::net::SNetParams snp;
+	snp.numberChannels = 2;
+
 	if(i == 's')
 	{
-		net::INetManager* netManager = net::createIrrNetServer(0,65535);
+		net::INetManager* netManager = net::createIrrNetServer(0, 65535, snp);
+
+		netManager->setVerbose(true);
 
 		ServerNetCallback* serverCallback = new ServerNetCallback(netManager);
 		netManager->setNetCallback(serverCallback);
@@ -138,8 +143,10 @@ int main()
 	else
 	{
 		ClientNetCallback* clientCallback = new ClientNetCallback();
-		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "crossalt.ru", 65535);
+		net::INetManager* netManager = net::createIrrNetClient(clientCallback, "crossalt.ru", 65535, snp);
 		clientCallback->incc = netManager;
+
+		netManager->setVerbose(true);
 
 		if(netManager->getConnectionStatus() != net::EICS_FAILED)
 		{
@@ -164,7 +171,7 @@ int main()
 			netManager->update(10);
 			net::SOutPacket packet;
 			packet << i;
-			netManager->sendOutPacket(packet);
+			netManager->sendOutPacketUnreliable(packet, -1, 2);
 			++i;
 			//std::cout << "ping: " << netManager->getPing() << std::endl;
 		}

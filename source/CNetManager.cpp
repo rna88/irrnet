@@ -414,13 +414,13 @@ namespace irr
 			return connectionStatus;
 		}
 
-		void CNetManager::kickClient(const u16 playerId, bool hardKick = false)
+		void CNetManager::kickClient(const u16 playerId, bool hardKick)
 		{
 			ENetPeer* currentPeer = getPlayerById(playerId);
 
 			if(currentPeer)
 				hardKick ?	enet_peer_disconnect_now(currentPeer,0) :
-							enet_peer_disconnect(currentPeer,0);
+							enet_peer_disconnect_later(currentPeer,0);
 		}
 
 		const u32 CNetManager::getClientAddress(const u16 playerId)
@@ -433,37 +433,38 @@ namespace irr
 			return 0;
 		}
 
-		void CNetManager::sendOutPacket(SOutPacket& outpacket)
+		void CNetManager::sendOutPacket(SOutPacket& outpacket, const s32 playerId, const u32 channelID)
 		{
+		    if(channelID == 1 || channelID > netParams.numberChannels)
+                if(verbose) std::cout << "Error sending packet: channelID is incorrect!" << std::endl;
+
 			ENetPacket* packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(),
 				ENET_PACKET_FLAG_RELIABLE);
 
-			enet_host_broadcast(host, 0, packet);
+            if(playerId < 0) enet_host_broadcast(host, channelID, packet);
+            else
+            {
+                ENetPeer* currentPeer = getPlayerById(playerId);
+
+                if(currentPeer && currentPeer->state == ENET_PEER_STATE_CONNECTED)
+                    enet_peer_send(currentPeer, channelID, packet);
+            }
 		}
 
-		void CNetManager::sendOutPacket(SOutPacket& outpacket, const u16 playerId)
+		void CNetManager::sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId, const u32 channelID)
 		{
-			ENetPacket* packet = enet_packet_create ((char*)outpacket.getData(), outpacket.getSize(),
-				ENET_PACKET_FLAG_RELIABLE);
-			ENetPeer* currentPeer = getPlayerById(playerId);
+		    if(channelID == 1 || channelID > netParams.numberChannels)
+                if(verbose) std::cout << "Error sending packet: channelID is incorrect!" << std::endl;
 
-			if(currentPeer && currentPeer->state == ENET_PEER_STATE_CONNECTED)
-				enet_peer_send(currentPeer, 0, packet);
-		}
-
-		void CNetManager::sendOutPacketUnreliable(SOutPacket& outpacket)
-		{
 			ENetPacket* packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(), 0);
-			enet_host_broadcast(host, 0, packet);
-		}
+			if(playerId < 0) enet_host_broadcast(host, channelID, packet);
+            else
+            {
+                ENetPeer* currentPeer = getPlayerById(playerId);
 
-		void CNetManager::sendOutPacketUnreliable(SOutPacket& outpacket, const u16 playerId)
-		{
-			ENetPacket* packet = enet_packet_create((char*)outpacket.getData(), outpacket.getSize(), 0);
-			ENetPeer* currentPeer = getPlayerById(playerId);
-
-			if(currentPeer && currentPeer->state == ENET_PEER_STATE_CONNECTED)
-				enet_peer_send(currentPeer, 0, packet);
+                if(currentPeer && currentPeer->state == ENET_PEER_STATE_CONNECTED)
+                    enet_peer_send(currentPeer, channelID, packet);
+            }
 		}
 
 		extern INetManager* createIrrNetClient(INetCallback* callback, const c8* addressc, const u32 port, const SNetParams& params)

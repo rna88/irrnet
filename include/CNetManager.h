@@ -36,11 +36,9 @@ namespace irr
 			virtual void setNetIterations(u16 iterations) {netIterations = iterations;}
 			virtual void setNetCallback(INetCallback* netCallback) {pHandler = netCallback;}
 			virtual void setGlobalPacketRelay(bool relay);
-			virtual void sendOutPacket(SOutPacket& outpacket);
-			virtual void sendOutPacket(SOutPacket& outpacket, const u16 playerId);
-			virtual void sendOutPacketUnreliable(SOutPacket& outpacket);
-			virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const u16 playerId);
-			virtual void kickClient(const u16 playerId, bool hardKick);
+            virtual void sendOutPacket(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0);
+			virtual void sendOutPacketUnreliable(SOutPacket& outpacket, const s32 playerId = -1, const u32 channelID = 0);
+			virtual void kickClient(const u16 playerId, bool hardKick = false);
 
 			virtual const u32 getPeerCount();
 			virtual const u32 getChannelsCount();
