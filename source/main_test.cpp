@@ -173,7 +173,7 @@ int main()
                 int q;
                 std::cin >> q;
             }
-			netManager->update(10);
+			netManager->update(1);
 			net::SOutPacket packet;
 			packet << i;
 			netManager->sendOutPacketUnreliable(packet, -1, 2, true);

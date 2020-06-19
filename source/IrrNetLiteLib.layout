@@ -14,12 +14,12 @@
 	</File>
 	<File name="..\include\CNetManager.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1507" topLine="25" />
+			<Cursor1 position="1461" topLine="25" />
 		</Cursor>
 	</File>
 	<File name="..\include\INetManager.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="5250" topLine="159" />
+			<Cursor1 position="6253" topLine="159" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
