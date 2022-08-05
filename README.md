@@ -7,11 +7,7 @@ Changelog can be viewed [here](https://github.com/rna88/irrnet/blob/master/CHANG
 
 ## Compiling for Linux
 
-When cloning use the `--recurse-submodules` flag to retrieve the enet and zlib libraries needed by the project:
-
-`git clone --recurse-submodules https://github.com/rna88/irrnet.git`
-
-Then run `make` in the `source/` directory to build the library, which will be placed in `lib/`.
+Run `make` in the `source/` directory to build the library, which will be placed in `lib/`.
 
 
 ## Building examples

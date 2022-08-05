@@ -54,10 +54,10 @@ class ServerNetCallback : public net::INetCallback
 	f32 cannonAngle;
 public:
 	ServerNetCallback(net::INetManager* netManagerIn) : netManager(netManagerIn) {}
-	
-	
+
+
 	// Our handlePacket function.
-	virtual void handlePacket(net::SInPacket& packet)
+	virtual void handlePacket(net::SInPacket& packet, u32 channelID)
 	{
 		// The packets will use a single char to store
 		// the packet identifier, remember to use the
@@ -65,7 +65,7 @@ public:
 		// packet identifiers. c8 is a typedef for char.
 		c8 packetid;
 		packet >> packetid;
-		
+
 		// Here we will switch based on the packet id.
 		switch((E_PACKET_TYPE)packetid)
 		{
@@ -85,7 +85,7 @@ public:
 			// to the console.
 			core::stringc message;
 			packet >> message;
-			
+
 			// We can obtain a unique "player id" from a packet identifying the client that
 			// sent it. More details about the player id in a later example, for now we will
 			// just print it out with the message so we know whos saying what.
@@ -93,19 +93,19 @@ public:
 			std::cout << std::endl;
 			break;
 		}
-		
+
 		// After handling a packet, we will send an updated status of the cannon to all clients.
 		net::SOutPacket rotationPacket;
-		
+
 		// The packet id is the first thing that goes in a packet. Note that I am casting it to a char,
 		// because that is what we want to store it as, to save space. Be careful to use the same types
 		// when sending and receiving, don't send as a char and receive as an int, it will cause trouble.
 		rotationPacket << (c8)EPT_ROTATION;
 		rotationPacket << cannonAngle;
-		
+
 		// Send the packet to all connected clients.
 		netManager->sendOutPacket(rotationPacket);
-		
+
 		// Send a power update too.
 		net::SOutPacket powerPacket;
 		powerPacket << (c8)EPT_POWER;
@@ -119,14 +119,14 @@ class ClientNetCallback : public net::INetCallback
 {
 public:
 	// Our handlePacket function.
-	virtual void handlePacket(net::SInPacket& packet)
+	virtual void handlePacket(net::SInPacket& packet, u32 channelID)
 	{
 		// Just like the server, we obtain the packet id and print
 		// the information based on the packet we received. I hope the
 		// rest of this function is self-explanatory.
 		c8 packetid;
 		packet >> packetid;
-		
+
 		switch((E_PACKET_TYPE)packetid)
 		{
 		case EPT_ROTATION:
@@ -152,14 +152,14 @@ int main()
 	std::cout << "Client (c) or Server (s)?";
 	char i;
 	std::cin >> i;
-	
+
 	// If they typed 's' they are the server else they are the client.
 	if(i == 's')
 	{
-		// Create an irrNetLite server. We won't specifiy a listen port, 
+		// Create an irrNetLite server. We won't specifiy a listen port,
 		// so the default port of 45000 will be used.
 		net::INetManager* netManager = net::createIrrNetServer(0);
-		
+
 		// Pass in a server specific net callback.
 		ServerNetCallback* serverCallback = new ServerNetCallback(netManager);
 		netManager->setNetCallback(serverCallback);
@@ -182,17 +182,17 @@ int main()
 
 		if (netManager->getConnectionStatus() == net::EICS_FAILED)
 			return 0;
-		
+
 		// Print a simple menu.
 		std::cout 	<< "You are connected! What would you like to do?" << std::endl
 				<< "1. Change the cannon rotation." << std::endl
 				<< "2. Change the cannon power." << std::endl
 				<< "3. Send a message." << std::endl;
-				
+
 		// Take the input.
 		char i = 0;
 		std::cin >> i;
-		
+
 		// Switch based on input.
 		switch(i)
 		{
@@ -201,7 +201,7 @@ int main()
 				// Here we create a rotation packet and send it to the server.
 				net::SOutPacket rotationPacket;
 				rotationPacket << (c8)EPT_ROTATION; // Remember to cast to the correct type.
-				
+
 				// Ask for the rotation.
 				f32 rotation;
 				std::cout << "Please enter a rotation: ";
@@ -239,19 +239,19 @@ int main()
 			default:
 				break;
 		}
-	
+
 		// Here is the update loop, we will exit if there is a connection problem.
 		while(netManager->getConnectionStatus() != net::EICS_FAILED)
 		{
 			// Here we update.
 			netManager->update(1000);
 		}
-		
+
 		// Clean up.
 		delete netManager;
 		delete clientCallback;
 	}
-	
+
 	// And we're done, return 0 and make like a banana.
 	return 0;
 }
